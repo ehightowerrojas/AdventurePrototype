@@ -51,21 +51,21 @@ class AdventureScene extends Phaser.Scene {
         /** @type {number} UI spacing unit in scaled pixels (1% of width). Use multiples of `this.s` for text sizes, margins, etc. */
         this.s = this.game.config.width * 0.01;
 
-        this.cameras.main.setBackgroundColor('#444');
+        this.cameras.main.setBackgroundColor('#000000');
         this.cameras.main.fadeIn(this.transitionDuration, 0, 0, 0);
 
-        this.add.rectangle(this.w * 0.75, 0, this.w * 0.25, this.h).setOrigin(0, 0).setFillStyle(0);
+        this.add.rectangle(this.w * .75, 0, this.w * 0.25, this.h).setOrigin(0, 0).setFillStyle(0x202168, 1);
         this.add.text(this.w * 0.75 + this.s, this.s)
             .setText(this.name)
-            .setStyle({ fontSize: `${3 * this.s}px` })
-            .setWordWrapWidth(this.w * 0.25 - 2 * this.s);
+            .setStyle({ fontSize: `${3 * this.s}px Georgia`})
+            .setWordWrapWidth(this.w * 0.25 - 2 * this.s); 
 
         this.messageBox = this.add.text(this.w * 0.75 + this.s, this.h * 0.33)
-            .setStyle({ fontSize: `${2 * this.s}px`, color: '#eea' })
+            .setStyle({ fontSize: `${2 * this.s}px Georgia`, color: '#eea' })
             .setWordWrapWidth(this.w * 0.25 - 2 * this.s);
 
         this.inventoryBanner = this.add.text(this.w * 0.75 + this.s, this.h * 0.66)
-            .setStyle({ fontSize: `${2 * this.s}px` })
+            .setStyle({ fontSize: `${2 * this.s}px Georgia` })
             .setText("Inventory")
             .setAlpha(0);
 
@@ -73,7 +73,7 @@ class AdventureScene extends Phaser.Scene {
         this.updateInventory();
 
         this.add.text(this.w-3*this.s, this.h-3*this.s, "📺")
-            .setStyle({ fontSize: `${2 * this.s}px` })
+            .setStyle({ fontSize: `${2 * this.s}px Georgia` })
             .setInteractive({useHandCursor: true})
             .on('pointerover', () => {
                 if (this.scale.isFullscreen) {
@@ -135,7 +135,7 @@ class AdventureScene extends Phaser.Scene {
         let h = this.h * 0.66 + 3 * this.s;
         this.inventory.forEach((e, i) => {
             let text = this.add.text(this.w * 0.75 + 2 * this.s, h, e)
-                .setStyle({ fontSize: `${1.5 * this.s}px` })
+                .setStyle({ fontSize: `${1.5 * this.s}px Georgia` })
                 .setWordWrapWidth(this.w * 0.75 + 4 * this.s);
             h += text.height + this.s;
             this.inventoryTexts.push(text);
