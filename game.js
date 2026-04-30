@@ -1,6 +1,94 @@
-class Demo1 extends AdventureScene {
+class Monologue extends AdventureScene {
+    constructor(){
+        super("monologue", "");
+    }
+
+    preload() {
+        this.load.image('AllieScared', 'assets/AllieScared.png');
+    }
+
+    create() {
+        //--Monologue Phase1--//
+        let monologueText1 = this.add.text(200, -200, "...", { fontSize: '50px Georgia'}).setAlpha(0);
+        let monologueText2 = this.add.text(130, 0, "H-Hello?", { fontSize: '50px Georgia'}).setAlpha(0);
+        let monologueText3 = this.add.text(-290, 200, "What the heck… why is the voice in my head so loud?", { fontSize: '50px Georgia'}).setAlpha(0);
+        let monologueText4 = this.add.text(-70, 400, "Where did all my friends go?", { fontSize: '50px Georgia'}).setAlpha(0);
+        this.add.container(745, 375, [monologueText1, monologueText2, monologueText3, monologueText4]);
+        
+        this.tweens.chain({
+            tweens: [
+                {
+                    targets: monologueText1,
+                    alpha: 1,
+                    duration: 2000,
+                    delay: 500
+                },
+                {
+                    targets: monologueText2,
+                    alpha: 1,
+                    duration: 2000
+                },
+                {
+                    targets: monologueText3,
+                    alpha: 1,
+                    duration: 3000
+                },
+                {
+                    targets: monologueText4,
+                    alpha: 1,
+                    duration: 2500
+                },
+                {
+                    targets: [monologueText1, monologueText2, monologueText3, monologueText4],
+                    alpha: 0,
+                    duration: 2200
+                }
+            ]
+        });
+        //--End Monologue Phase1--//
+        
+        //--Monologue Phase2--//
+        this.allieScared = this.add.image(960, 540, 'AllieScared').setAlpha(0).setScale(1.5);
+        let monologue2Text1 = this.add.text(780, 225, "What's going on?", { fontSize: '50px Georgia'}).setAlpha(0);
+        let monologue2Text2 = this.add.text(475, 800, "What’s happening to my head, this doesn’t feel real–", { fontSize: '50px Georgia'}).setAlpha(0);
+
+        this.tweens.chain({
+            tweens:[
+                {
+                    targets: monologue2Text1,
+                    alpha: 1,
+                    duration: 2000,
+                    delay: 13500
+                },
+                {
+                    targets: this.allieScared,
+                    alpha: 1, 
+                    duration: 2000,
+                    delay: 1000
+                },
+                {
+                    targets: monologue2Text2,
+                    alpha: 1,
+                    duration: 2000
+                }       
+            ]
+        })
+        //--End Monologue Phase2--//
+        //Add glitch effect and then jump to scene 1
+        //--Monologue Phase3--//
+
+        //--End Monologue Phase3--//
+
+        this.input.on('pointerdown', () => {
+            this.cameras.main.fade(1000, 0,0,0);
+            this.time.delayedCall(1000, () => this.scene.start('Park1'));
+        });
+    }
+}
+
+class Park1 extends AdventureScene {
     constructor() {
-        super("demo1", "First Room");
+        super("park1", "A Nice Park");
     }
 
     onEnter() {
@@ -54,16 +142,16 @@ class Demo1 extends AdventureScene {
                     this.loseItem("key");
                     this.showMessage("*squeak*");
                     door.setText("🚪 unlocked door");
-                    this.gotoScene('demo2');
+                    this.gotoScene('park2');
                 }
             })
 
     }
 }
 
-class Demo2 extends AdventureScene {
+class Park2 extends AdventureScene {
     constructor() {
-        super("demo2", "The second room has a long name (it truly does).");
+        super("park2", "The second room has a long name (it truly does).");
     }
     onEnter() {
         this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
@@ -73,7 +161,7 @@ class Demo2 extends AdventureScene {
                 this.showMessage("You've got no other choice, really.");
             })
             .on('pointerdown', () => {
-                this.gotoScene('demo1');
+                this.gotoScene('park1');
             });
 
         let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
@@ -97,12 +185,43 @@ class Intro extends Phaser.Scene {
         super('intro')
     }
     create() {
-        this.add.text(50,50, "Adventure awaits!").setFontSize(50);
-        this.add.text(50,100, "Click anywhere to begin.").setFontSize(20);
-        this.input.on('pointerdown', () => {
-            this.cameras.main.fade(1000, 0,0,0);
-            this.time.delayedCall(1000, () => this.scene.start('demo1'));
-        });
+        let introText1 = this.add.text(0, 0, "A Game for Ru", { fontSize: '70px Georgia'});
+        let introText2 = this.add.text(65, 90, "Click here to begin.", { fontSize: '40px Georgia'})
+            .setInteractive({useHandCursor: true})
+            .on('pointerover', () => {
+                introText2.setFill('cyan');
+            })
+            .on('pointerout', () => {
+                introText2.setFill('white');
+            })
+            .on('pointerdown', () => {
+                this.cameras.main.fade(1000, 0,0,0);
+                this.time.delayedCall(1000, () => this.scene.start('monologue'));
+            })
+        this.add.container(755, 475, [introText1, introText2]);
+
+        this.add.text(1765, 960, "📺", {fontSize: '60px'})
+            .setInteractive({useHandCursor: true})
+            .on('pointerover', () => {
+                if (this.scale.isFullscreen) {
+                    this.showMessage('Exit Fullscreen?');
+                } else {
+                    this.showMessage('Enter Fullscreen?');
+                }
+            })
+            .on('pointerdown', () => {
+                if (this.scale.isFullscreen) {
+                    this.scale.stopFullscreen();
+                } else {
+                    this.scale.startFullscreen();
+                }
+            });
+
+        //this.input.on('pointerdown', () => {
+        //    if ()
+        //    this.cameras.main.fade(1000, 0,0,0);
+        //    this.time.delayedCall(1000, () => this.scene.start('monologue'));
+        //});
     }
 }
 
@@ -125,7 +244,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Demo1, Demo2, Outro],
+    scene: [Intro, Monologue, Park1, Park2, Outro],
     title: "Adventure Game",
 });
 

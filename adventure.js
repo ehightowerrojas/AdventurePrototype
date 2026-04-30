@@ -75,7 +75,13 @@ class AdventureScene extends Phaser.Scene {
         this.add.text(this.w-3*this.s, this.h-3*this.s, "📺")
             .setStyle({ fontSize: `${2 * this.s}px` })
             .setInteractive({useHandCursor: true})
-            .on('pointerover', () => this.showMessage('Fullscreen?'))
+            .on('pointerover', () => {
+                if (this.scale.isFullscreen) {
+                    this.showMessage('Exit Fullscreen?');
+                } else {
+                    this.showMessage('Enter Fullscreen?');
+                }
+            })
             .on('pointerdown', () => {
                 if (this.scale.isFullscreen) {
                     this.scale.stopFullscreen();
@@ -98,9 +104,8 @@ class AdventureScene extends Phaser.Scene {
         this.messageBox.setText(message);
         this.tweens.add({
             targets: this.messageBox,
-            alpha: { from: 1, to: 0 },
-            easing: 'Quintic.in',
-            duration: 4 * this.transitionDuration
+            alpha: { from: 1, to: 1 },
+            easing: 'Quintic.in'
         });
     }
 
