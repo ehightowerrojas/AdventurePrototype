@@ -215,7 +215,7 @@ class Intro extends Phaser.Scene {
     }
     create() {
         let introText1 = this.add.text(0, 0, "A Game for Ru", { fontSize: '70px Georgia'}).setColor('#202168');
-        let introText2 = this.add.text(65, 90, "Click here to begin.", { fontSize: '40px Georgia'})
+        let introText2 = this.add.text(65, 90, "Click here to begin.", { fontSize: '40px Georgia'}).setColor('#202168')
             .setInteractive({useHandCursor: true})
             .on('pointerover', () => {
                 introText2.setFill('white');
