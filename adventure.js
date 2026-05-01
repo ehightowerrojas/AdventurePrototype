@@ -56,17 +56,20 @@ class AdventureScene extends Phaser.Scene {
         this.cameras.main.setBackgroundColor('#000000');
         this.cameras.main.fadeIn(this.transitionDuration, 0, 0, 0);
 
-        this.add.rectangle(this.w * .75, 0, this.w * 0.25, this.h).setOrigin(0, 0).setFillStyle(0x202168, 1);
+        this.add.rectangle(this.w * .75, 0, this.w * 0.25, this.h).setOrigin(0, 0).setFillStyle(0x202168, 1).setDepth(10);
         this.add.text(this.w * 0.75 + this.s, this.s)
+            .setDepth(12)
             .setText(this.name)
             .setStyle({ fontSize: `${3 * this.s}px Georgia`})
             .setWordWrapWidth(this.w * 0.25 - 2 * this.s); 
 
         this.messageBox = this.add.text(this.w * 0.75 + this.s, this.h * 0.33)
+            .setDepth(12)
             .setStyle({ fontSize: `${2 * this.s}px Georgia`, color: '#eea' })
             .setWordWrapWidth(this.w * 0.25 - 2 * this.s);
 
         this.inventoryBanner = this.add.text(this.w * 0.75 + this.s, this.h * 0.66)
+            .setDepth(12)
             .setStyle({ fontSize: `${2 * this.s}px Georgia` })
             .setText("Inventory")
             .setAlpha(0);
@@ -75,6 +78,7 @@ class AdventureScene extends Phaser.Scene {
         this.updateInventory();
 
         this.add.image(this.w-3*this.s, this.h-3*this.s, 'FullscreenIcon')
+            .setDepth(11)
             .setScale(0.25)
             .setInteractive({useHandCursor: true})
             .on('pointerover', () => {

@@ -6,10 +6,21 @@ class Monologue extends AdventureScene {
     preload() {
         this.load.image('AllieScared', 'assets/AllieScared.png');
         this.load.video('Glitch', 'assets/Glitch.mp4', 'loadeddata', false, true);
+        this.load.audio('MysteriousMusic', 'assets/Epic Dark Mysterious Music (Copyright and Royalty Free) Black Fingerprint.mp3');
+        this.load.audio('GlitchSound', 'assets/Glitch Sound Effect 4.mp3');
     }
 
     create() {
         //--Monologue Phase1--//
+        let mysteriousMusic = this.sound.add('MysteriousMusic');
+        mysteriousMusic.play({ loop: false });
+        mysteriousMusic.volume = 0;
+        this.tweens.add({
+            targets: mysteriousMusic,
+            volume: 1,
+            duration: 10000,
+        });
+
         let monologueText1 = this.add.text(200, -200, "...", { fontSize: '50px Georgia'}).setAlpha(0);
         let monologueText2 = this.add.text(130, 0, "H-Hello?", { fontSize: '50px Georgia'}).setAlpha(0);
         let monologueText3 = this.add.text(-290, 200, "What the heck… why is the voice in my head so loud?", { fontSize: '50px Georgia'}).setAlpha(0);
@@ -76,6 +87,7 @@ class Monologue extends AdventureScene {
         })
 
         this.add.image(1795, 960, 'FullscreenIcon')
+            .setDepth(11)
             .setScale(0.25)
             .setInteractive({useHandCursor: true})
             .on('pointerover', () => {
@@ -100,8 +112,15 @@ class Monologue extends AdventureScene {
             glitch.play(true);
             glitch.setLoop(false);
         });
+        this.time.delayedCall(21200, () => {
+            this.cameras.main.flash(500, 255, 255, 255);
+            mysteriousMusic.stop({ loop: false });
+            let glitchSound = this.sound.add('GlitchSound');
+            glitchSound.play({ loop: false });
+        });
         //--End Monologue Phase3--//
         this.time.delayedCall(24000, () => {
+            this.sound.stopAll();
             this.scene.start('park1');
             this.gotoScene('park1');
         });
@@ -116,10 +135,15 @@ class Park1 extends AdventureScene {
     preload() {
         this.load.image('ParkBackground1', 'assets/ParkBackground1.png');
         this.load.image('AllieWalkingDown', 'assets/AllieWalkingDown.gif');
+        this.load.video('FollowButterfly', 'assets/mariposa-Picsart-BackgroundRemover.mp4');
+        this.load.audio('ChillAdventureMusic', 'assets/ChillAdventureMusic.mp3');
     }
 
     onEnter() {
         //--Player Character--//
+        this.sound.play('ChillAdventureMusic', { loop: true });
+        this.sound.volume = 0.3;
+
         console.log("Entered park1");
 
         this.add.image(720, 540, 'ParkBackground1').setScale(2.25);
@@ -158,6 +182,101 @@ class Park1 extends AdventureScene {
             .setColor('#ffffff')
             .setBackgroundColor('#000000')
             .setAlpha(0);
+        //--End Player Dialogue--//
+
+        //--Interactable Objects--//
+        this.add.rectangle(1040, 800, 800, 160, 0x201010)
+            .setAlpha(0.01)
+            .setInteractive()
+            .on('pointerover', () => {
+                if(Allie.x == 600) {
+                    this.showMessage("It smells kinda funny, I don't wanna go closer...");
+                } else {
+                    this.showMessage("A pretty and calm looking lake.");
+                }
+            })
+            .on('pointerout', () => {
+                if(this.x1 == 1) {
+                    this.fadeMessage("It smells kinda funny, I don't wanna go closer...");
+                    this.x1 = 0;
+                } else {
+                    this.fadeMessage("A pretty and calm looking lake.");
+                }
+            })
+            .on('pointerdown', () => {
+                this.showMessage("It smells kinda funny, I don't wanna go closer...");
+                this.x1 = 1;
+                this.tweens.add({
+                    targets: Allie,
+                    x: 600,
+                    duration: 1000,
+                    ease: 'Sine.inOut'
+                });
+            });
+
+        this.add.rectangle(690, 350, 1500, 500, 0x201010)
+            .setAlpha(0.01)
+            .setInteractive()
+            .on('pointerover', () => {
+                if(Allie.x == 425) {
+                    this.showMessage("The sun is so warm and nice...");
+                } else {
+                    this.showMessage("The sky is so pretty today...");
+                }
+            })
+            .on('pointerout', () => {
+                if(this.x1 == 1) {
+                    this.fadeMessage("The sun is so warm and nice...");
+                    this.x1 = 0;
+                } else {
+                    this.fadeMessage("The sky is so pretty today...");
+                }
+            })
+            .on('pointerdown', () => {
+                this.showMessage("The sun is so warm and nice...");
+                this.x1 = 1;
+                this.tweens.add({
+                    targets: Allie,
+                    x: 425,
+                    y: 810,
+                    scale: 3.1,
+                    duration: 1000,
+                    ease: 'Sine.inOut'
+                });
+            });
+
+        let followButterfly = this.add.video(200, 825, 'FollowButterfly')
+            .setAngle(90)
+            .setScale(0.15)
+            .setAlpha(0.01)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage("Follow the butterflies?");
+            })
+            .on('pointerout', () => {
+                this.fadeMessage("Follow the butterflies?");  
+            })
+            .on('pointerdown', () => {
+                this.showMessage("Let's go!");
+                this.tweens.add({
+                    targets: Allie,
+                    x: 1700,
+                    y: 1200,
+                    duration: 5000,
+                    ease: 'Sine.inOut'
+                });
+                this.tweens.add({
+                    targets: followButterfly,
+                    x: 1700,
+                    y: 1200,
+                    duration: 3000,
+                    ease: 'linear'
+                });
+                this.cameras.main.fade(5000, 0,0,0);
+                this.time.delayedCall(5500, () => this.scene.start('park2'));
+            });
+        
+        followButterfly.play(true);
 
         this.tweens.chain({
             tweens: [
@@ -171,13 +290,30 @@ class Park1 extends AdventureScene {
                     targets: playerDialogue2,
                     alpha: 1,
                     duration: 2000
+                },
+                {
+                    targets: followButterfly,
+                    alpha: 1,
+                    duration: 500,
+                    delay: 5000
+                },
+                {
+                    targets: followButterfly,
+                    y: 850,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'Sine.inOut',
+                    duration: 500,
                 }
             ]
         });
-        //--End Player Dialogue--//
 
-        //--Interactable Objects--//
-        this.add.rectangle(1500, 500, 200, 100, 0x000000);
+        this.tweens.add({
+            targets: [playerDialogue1, playerDialogue2],
+            y: 1080,
+            duration: 200000
+        });
+        //--End Interactable Objects--//
 
         
 /*
@@ -227,9 +363,79 @@ class Park1 extends AdventureScene {
 
 class Park2 extends AdventureScene {
     constructor() {
-        super("park2", "The second room has a long name (it truly does).");
+        super("park2", "A Nice Park");
+    }
+
+    preload() {
+        this.load.image('ParkBackground2', 'assets/bancada-de-parque-pixelada-com-vista-do-horizonte-da-cidade_1282444-204053.png');
+        this.load.image('AllieWalkingDown', 'assets/AllieWalkingDown.gif');
     }
     onEnter() {
+
+        this.add.image(720, 540, 'ParkBackground2').setScale(1.25);
+
+        let Allie = this.add.image(-50, 820, 'AllieWalkingDown')
+            .setScale(3)
+            .setInteractive()
+            .on('pointerover', () => this.showMessage("That's you, Allie!"))
+            .on('pointerout', () => {
+            if(this.x == 1) {
+                this.fadeMessage("Curious and determined as ever...")
+                this.x = 0;
+            } else {
+                this.fadeMessage("That's you, Allie!");
+            }  
+            })
+            .on('pointerdown', () => {
+                this.showMessage("Curious and determined as ever...");
+                this.x = 1
+                this.tweens.add({
+                    targets: Allie,
+                    scale: 3.35,
+                    yoyo: true,
+                    ease: 'Sine.inOut',
+                    duration: 100
+                });
+            });
+
+        this.tweens.add({
+            targets: Allie,
+            x: 1500,
+            duration: 15000,
+            ease: 'linear'
+        });
+
+        let playerDialogue1 = this.add.text(400, 400, "Its so peaceful here, I love it…", { fontSize: '40px Georgia'})
+            .setColor('#ffffff')
+            .setBackgroundColor('#000000')
+            .setAlpha(0);
+        let playerDialogue2 = this.add.text(500, 530, "There's some weird cracks in the structures though,\nI guess it was made a really long time ago", { fontSize: '40px Georgia'})
+            .setColor('#ffffff')
+            .setBackgroundColor('#000000')
+            .setAlpha(0);
+
+        this.tweens.chain({
+            tweens: [
+                {
+                    targets: playerDialogue1,
+                    alpha: 1,
+                    duration: 2000,
+                    delay: 2000
+                },
+                {
+                    targets: playerDialogue2,
+                    alpha: 1,
+                    duration: 2000
+                }
+            ]
+        });
+
+        this.tweens.add({
+            targets: [playerDialogue1, playerDialogue2],
+            y: 1080,
+            duration: 200000
+        });
+/*
         this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
             .setFontSize(this.s * 2)
             .setInteractive()
@@ -253,7 +459,9 @@ class Park2 extends AdventureScene {
                 });
             })
             .on('pointerdown', () => this.gotoScene('outro'));
+            */
     }
+            
 }
 
 class Intro extends Phaser.Scene {
@@ -263,24 +471,43 @@ class Intro extends Phaser.Scene {
 
     preload() {
         this.load.image('FullscreenIcon', 'assets/FullscreenIcon.png');
+        this.load.image('TitleAllie', 'assets/TitleAllie.png');
+
     }
     create() {
+        let backgroundAllie = this.add.image(960, 540, 'TitleAllie').setScale(4.1).setAlpha(0.02);
+        let backgroundText = this.add.text(-600, -40, "So Close Yet So Far", { fontSize: '200px Georgia'}).setColor('#202168').setAlpha(0.5);
+        this.tweens.add({
+            targets: backgroundText,
+            scale: 1.5,
+            x: -950,
+            duration: 80000,
+        });
         let introText1 = this.add.text(0, 0, "A Game for Ru", { fontSize: '70px Georgia'}).setColor('#ffffff');
         let introText2 = this.add.text(65, 90, "Click here to begin.", { fontSize: '40px Georgia'}).setColor('#ffffff')
             .setInteractive({useHandCursor: true})
             .on('pointerover', () => {
-                introText2.setFill('#202168');
+                introText2.setFill('#3538d3');
             })
             .on('pointerout', () => {
                 introText2.setFill('white');
             })
             .on('pointerdown', () => {
+                this.tweens.add({
+                    targets: backgroundText,
+                    alpha: 0,
+                    scale: 2,
+                    y: -150,
+                    x: -1300,
+                    duration: 1000,
+                });
                 this.cameras.main.fade(1000, 0,0,0);
-                this.time.delayedCall(1000, () => this.scene.start('park1'));
+                this.time.delayedCall(1000, () => this.scene.start('monologue'));
             })
-        this.add.container(755, 475, [introText1, introText2]);
+        this.add.container(755, 475, [backgroundText, introText1, introText2]);
 
         this.add.image(1840, 1000, 'FullscreenIcon')
+            .setDepth(11)
             .setScale(0.25)
             .setInteractive({useHandCursor: true})
             .on('pointerover', () => {
@@ -335,7 +562,7 @@ const game = new Phaser.Game({
     render: {
         pixelArt: true
     },
-    scene: [Intro, Park1, Monologue, Park2, Outro],
+    scene: [Intro, Monologue, Park1, Park2, Outro],
     title: "Adventure Game",
 });
 
