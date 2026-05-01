@@ -15,7 +15,9 @@
  * @extends {Phaser.Scene}
  */
 class AdventureScene extends Phaser.Scene {
-
+    preload() {
+        this.load.image('FullscreenIcon', 'assets/FullscreenIcon.png');
+    }
     /**
      * Phaser lifecycle: receives data passed by `scene.start(key, data)`.
      * We use this to thread the inventory through scene transitions.
@@ -72,14 +74,21 @@ class AdventureScene extends Phaser.Scene {
         this.inventoryTexts = [];
         this.updateInventory();
 
-        this.add.text(this.w-3*this.s, this.h-3*this.s, "📺")
-            .setStyle({ fontSize: `${2 * this.s}px Georgia` })
+        this.add.image(this.w-3*this.s, this.h-3*this.s, 'FullscreenIcon')
+            .setScale(0.25)
             .setInteractive({useHandCursor: true})
             .on('pointerover', () => {
                 if (this.scale.isFullscreen) {
                     this.showMessage('Exit Fullscreen?');
                 } else {
                     this.showMessage('Enter Fullscreen?');
+                }
+            })
+            .on('pointerout', () => {
+                if (this.scale.isFullscreen) {
+                    this.fadeMessage('Exit Fullscreen?');
+                } else {
+                    this.fadeMessage('Enter Fullscreen?');
                 }
             })
             .on('pointerdown', () => {
@@ -95,7 +104,7 @@ class AdventureScene extends Phaser.Scene {
     }
 
     /**
-     * Briefly flash a message in the UI message box. The message fades out
+     * Flash a message in the UI message box.
      * over a few seconds.
      *
      * @param {string} message The text to show.
@@ -107,6 +116,21 @@ class AdventureScene extends Phaser.Scene {
             alpha: { from: 1, to: 1 },
             easing: 'Quintic.in'
         });
+    }
+
+    /**
+     * The previously diplayed message fades out over a few seconds.
+     * 
+     * @param {string} message The text that fades.
+     */
+    fadeMessage(message) {
+        this.messageBox.setText(message);
+        this.tweens.add({
+            targets: this.messageBox,
+            alpha: 0,
+            duration: 1200,
+            easing: 'Quintic.in'
+        })
     }
 
     /**

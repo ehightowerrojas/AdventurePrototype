@@ -75,7 +75,8 @@ class Monologue extends AdventureScene {
             ]
         })
 
-        this.add.text(1765, 960, "📺", {fontSize: '60px'})
+        this.add.image(1795, 960, 'FullscreenIcon')
+            .setScale(0.25)
             .setInteractive({useHandCursor: true})
             .on('pointerover', () => {
                 if (this.scale.isFullscreen) {
@@ -114,30 +115,72 @@ class Park1 extends AdventureScene {
 
     preload() {
         this.load.image('ParkBackground1', 'assets/ParkBackground1.png');
+        this.load.image('AllieWalkingDown', 'assets/AllieWalkingDown.gif');
     }
 
     onEnter() {
-
+        //--Player Character--//
         console.log("Entered park1");
 
-        this.add.image(700, 540, 'ParkBackground1').setScale(2);
+        this.add.image(720, 540, 'ParkBackground1').setScale(2.25);
 
-        let clip = this.add.text(this.w * 0.3, this.w * 0.3, "📎 paperclip")
-            .setFontSize(this.s * 2)
+        let Allie = this.add.image(400, 745, 'AllieWalkingDown')
+            .setScale(3)
             .setInteractive()
-            .on('pointerover', () => this.showMessage("Metal, bent."))
+            .on('pointerover', () => this.showMessage("That's you, Allie!"))
+            .on('pointerout', () => {
+            if(this.x == 1) {
+                this.fadeMessage("Curious and determined as ever...")
+                this.x = 0;
+            } else {
+                this.fadeMessage("That's you, Allie!");
+            }  
+            })
             .on('pointerdown', () => {
-                this.showMessage("No touching!");
+                this.showMessage("Curious and determined as ever...");
+                this.x = 1
                 this.tweens.add({
-                    targets: clip,
-                    x: '+=' + this.s,
-                    repeat: 2,
+                    targets: Allie,
+                    scale: 3.35,
                     yoyo: true,
                     ease: 'Sine.inOut',
                     duration: 100
                 });
             });
+        //--End Player Character--//
 
+        //--Player Dialogue--//
+        let playerDialogue1 = this.add.text(700, 400, "Oh nice, this is my home park!\nSo cool, I wanna explore!", { fontSize: '40px Georgia'})
+            .setColor('#ffffff')
+            .setBackgroundColor('#000000')
+            .setAlpha(0);
+        let playerDialogue2 = this.add.text(800, 600, "My head still feels funny though...", { fontSize: '40px Georgia'})
+            .setColor('#ffffff')
+            .setBackgroundColor('#000000')
+            .setAlpha(0);
+
+        this.tweens.chain({
+            tweens: [
+                {
+                    targets: playerDialogue1,
+                    alpha: 1,
+                    duration: 2000,
+                    delay: 2000
+                },
+                {
+                    targets: playerDialogue2,
+                    alpha: 1,
+                    duration: 2000
+                }
+            ]
+        });
+        //--End Player Dialogue--//
+
+        //--Interactable Objects--//
+        this.add.rectangle(1500, 500, 200, 100, 0x000000);
+
+        
+/*
         let key = this.add.text(this.w * 0.5, this.w * 0.1, "🔑 key")
             .setFontSize(this.s * 2)
             .setInteractive()
@@ -148,13 +191,15 @@ class Park1 extends AdventureScene {
                 this.showMessage("You pick up the key.");
                 this.gainItem('key');
                 this.tweens.add({
-                    targets: key,
-                    y: `-=${2 * this.s}`,
+                   targets: key,
+                   y: `-=${2 * this.s}`,
                     alpha: { from: 1, to: 0 },
                     duration: 500,
                     onComplete: () => key.destroy()
                 });
             })
+
+
 
         let door = this.add.text(this.w * 0.1, this.w * 0.15, "🚪 locked door")
             .setFontSize(this.s * 2)
@@ -174,6 +219,8 @@ class Park1 extends AdventureScene {
                     this.gotoScene('park2');
                 }
             })
+
+*/
 
     }
 }
@@ -213,29 +260,41 @@ class Intro extends Phaser.Scene {
     constructor() {
         super('intro')
     }
+
+    preload() {
+        this.load.image('FullscreenIcon', 'assets/FullscreenIcon.png');
+    }
     create() {
-        let introText1 = this.add.text(0, 0, "A Game for Ru", { fontSize: '70px Georgia'}).setColor('#202168');
-        let introText2 = this.add.text(65, 90, "Click here to begin.", { fontSize: '40px Georgia'}).setColor('#202168')
+        let introText1 = this.add.text(0, 0, "A Game for Ru", { fontSize: '70px Georgia'}).setColor('#ffffff');
+        let introText2 = this.add.text(65, 90, "Click here to begin.", { fontSize: '40px Georgia'}).setColor('#ffffff')
             .setInteractive({useHandCursor: true})
             .on('pointerover', () => {
-                introText2.setFill('white');
+                introText2.setFill('#202168');
             })
             .on('pointerout', () => {
-                introText2.setFill('#202168');
+                introText2.setFill('white');
             })
             .on('pointerdown', () => {
                 this.cameras.main.fade(1000, 0,0,0);
-                this.time.delayedCall(1000, () => this.scene.start('monologue'));
+                this.time.delayedCall(1000, () => this.scene.start('park1'));
             })
         this.add.container(755, 475, [introText1, introText2]);
 
-        this.add.text(1765, 960, "📺", {fontSize: '60px'})
+        this.add.image(1840, 1000, 'FullscreenIcon')
+            .setScale(0.25)
             .setInteractive({useHandCursor: true})
             .on('pointerover', () => {
                 if (this.scale.isFullscreen) {
                     this.showMessage('Exit Fullscreen?');
                 } else {
                     this.showMessage('Enter Fullscreen?');
+                }
+            })
+            .on('pointerout', () => {
+                if (this.scale.isFullscreen) {
+                    this.fadeMessage('Exit Fullscreen?');
+                } else {
+                    this.fadeMessage('Enter Fullscreen?');
                 }
             })
             .on('pointerdown', () => {
@@ -274,9 +333,9 @@ const game = new Phaser.Game({
         height: 1080
     },
     render: {
-        piselArt: true
+        pixelArt: true
     },
-    scene: [Intro, Monologue, Park1, Park2, Outro],
+    scene: [Intro, Park1, Monologue, Park2, Outro],
     title: "Adventure Game",
 });
 
