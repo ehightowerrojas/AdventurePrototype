@@ -804,7 +804,7 @@ class BonnieDialogue extends AdventureScene {
             duration: 200000
         });
 
-        if (this.hasItem('fishingRod') == true) {
+        if (this.registry.get('score') === 1) {
             this.tweens.chain({ 
                 tweens: [
                     {
@@ -902,6 +902,7 @@ class RiverInspect extends AdventureScene {
             .on('pointerover', () => this.showMessage("You found a weak fishing rod! (+1 Dmg, Can be used to fish [click item to aquire]"))
             .on('pointerout', () => this.fadeMessage("You found a weak fishing rod! (+1 Dmg, Can be used to fish [click item to aquire]"))
             .on('pointerdown', () => {
+                this.registry.set('score', 1); 
                 this.showMessage("Item aquired: Fishing Rod!");
                 this.gainItem('fishingRod');
                 this.tweens.add({
@@ -1025,6 +1026,6 @@ const game = new Phaser.Game({
     render: {
         pixelArt: true
     },
-    scene: [Intro, Monologue, Park1, Park2, Park3, RiverInspect, ParkAfterRod, BonnieDialogue, Outro],
+    scene: [RiverInspect, Intro, Monologue, Park1, Park2, Park3, ParkAfterRod, BonnieDialogue, Outro],
     title: "Adventure Game",
 });
