@@ -192,7 +192,7 @@ class Park1 extends AdventureScene {
                 if(Allie.x == 600) {
                     this.showMessage("It smells kinda funny, I don't wanna go closer...");
                 } else {
-                    this.showMessage("A pretty and calm looking lake.");
+                    this.showMessage("A pretty and calm looking river.");
                 }
             })
             .on('pointerout', () => {
@@ -200,7 +200,7 @@ class Park1 extends AdventureScene {
                     this.fadeMessage("It smells kinda funny, I don't wanna go closer...");
                     this.x1 = 0;
                 } else {
-                    this.fadeMessage("A pretty and calm looking lake.");
+                    this.fadeMessage("A pretty and calm looking river.");
                 }
             })
             .on('pointerdown', () => {
@@ -246,7 +246,6 @@ class Park1 extends AdventureScene {
             });
 
         let followButterfly = this.add.video(200, 825, 'FollowButterfly')
-            .setAngle(90)
             .setScale(0.15)
             .setAlpha(0.01)
             .setInteractive()
@@ -369,11 +368,12 @@ class Park2 extends AdventureScene {
     preload() {
         this.load.image('ParkBackground2', 'assets/bancada-de-parque-pixelada-com-vista-do-horizonte-da-cidade_1282444-204053.png');
         this.load.image('AllieWalkingDown', 'assets/AllieWalkingDown.gif');
+        this.load.video('FollowButterfly', 'assets/mariposa-Picsart-BackgroundRemover.mp4');
     }
     onEnter() {
 
         this.add.image(720, 540, 'ParkBackground2').setScale(1.25);
-
+        //--Allie Moving Across--//
         let Allie = this.add.image(-50, 820, 'AllieWalkingDown')
             .setScale(3)
             .setInteractive()
@@ -399,17 +399,31 @@ class Park2 extends AdventureScene {
             });
 
         this.tweens.add({
-            targets: Allie,
+            targets: Allie, 
             x: 1500,
             duration: 15000,
+            delay: 500,
             ease: 'linear'
         });
+        //--End Allie Moving Across--//
 
-        let playerDialogue1 = this.add.text(400, 400, "Its so peaceful here, I love it…", { fontSize: '40px Georgia'})
+        //--Butterflies Moving Across--//
+        let followButterfly = this.add.video(-50, 700, 'FollowButterfly')
+            .setScale(0.15);
+        followButterfly.play(true);
+        this.tweens.add({
+            targets: followButterfly,
+            x: 1500,
+            duration: 12000,
+            ease: 'linear'
+        });
+        //--End Butterflies Moving Across--//
+
+        let playerDialogue1 = this.add.text(400, 300, "It's so peaceful here, I love it…", { fontSize: '40px Georgia'})
             .setColor('#ffffff')
             .setBackgroundColor('#000000')
             .setAlpha(0);
-        let playerDialogue2 = this.add.text(500, 530, "There's some weird cracks in the structures though,\nI guess it was made a really long time ago", { fontSize: '40px Georgia'})
+        let playerDialogue2 = this.add.text(500, 430, "There are some weird cracks in the structures though,\nI guess it was made a really long time ago?", { fontSize: '40px Georgia'})
             .setColor('#ffffff')
             .setBackgroundColor('#000000')
             .setAlpha(0);
@@ -435,6 +449,11 @@ class Park2 extends AdventureScene {
             y: 1080,
             duration: 200000
         });
+
+        this.time.delayedCall(15500, () => {
+            this.cameras.main.fade(9000, 0,0,0),
+            this.scene.start('park3');
+        }, [], this);
 /*
         this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
             .setFontSize(this.s * 2)
@@ -462,6 +481,450 @@ class Park2 extends AdventureScene {
             */
     }
             
+}
+
+class Park3 extends AdventureScene {
+    constructor() {
+        super("park3", "A Nice Park");
+    }
+
+    preload() {
+        this.load.image('ParkBackground3', 'assets/pixel-art-illustration-park-background-pixelated-park-background-outside-park-background-pixelated-for-the-pixel-art-game-and-icon-for-website-and-game-old-school-retro-vector (1).jpg');
+        this.load.image('BonnieWalkingDown', 'assets/BonnieWalkingDown.gif');
+        this.load.image('AllieWalkingDown', 'assets/AllieWalkingDown.gif');
+        this.load.video('FollowButterfly', 'assets/mariposa-Picsart-BackgroundRemover.mp4');
+    }
+
+    onEnter() {
+        this.add.image(720, 533, "ParkBackground3")
+            .setScale(.92);
+
+        let Allie = this.add.image(-50, 900, 'AllieWalkingDown')
+            .setScale(3)
+            .setInteractive()
+            .on('pointerover', () => this.showMessage("That's you, Allie!"))
+            .on('pointerout', () => {
+            if(this.x == 1) {
+                this.fadeMessage("Curious and determined as ever...")
+                this.x = 0;
+            } else {
+                this.fadeMessage("That's you, Allie!");
+            }  
+            })
+            .on('pointerdown', () => {
+                this.showMessage("Curious and determined as ever...");
+                this.x = 1
+                this.tweens.add({
+                    targets: Allie,
+                    scale: 3.35,
+                    yoyo: true,
+                    ease: 'Sine.inOut',
+                    duration: 100
+                });
+            });
+        
+        this.tweens.add({
+            targets: Allie, 
+            x: 400,
+            y: 820,
+            duration: 4000
+        });
+
+        let Bonnie = this.add.image(940, 675, 'BonnieWalkingDown')
+            .setScale(3)
+            .setInteractive()
+            .on('pointerover', () => {
+                if(Allie.x == 840) {
+                this.showMessage("Talk to Bonnie?");
+                } else {
+                    this.showMessage("Who could that be?");
+                }
+            })
+            .on('pointerout', () => {
+                if(Allie.x == 840) {
+                    this.fadeMessage("Talk to Bonnie?");
+                    this.x = 0;
+                } else {
+                    this.fadeMessage("Who could that be?");
+                }  
+            })
+            .on('pointerdown', () => {
+                if(Allie.x == 840) {
+                    this.cameras.main.fade(5000, 0,0,0);
+                    this.time.delayedCall(5500, () => this.scene.start('bonnieDialogue'));
+                } else {
+                    this.showMessage("Let's find out I guess...");
+                    this.x = 1
+                    this.tweens.add({
+                        targets: Allie,
+                        x: 840,
+                        y: 780,
+                        scale: 2.9,
+                        duration: 3000
+                    });
+                }
+            });
+
+        let followButterfly = this.add.video(-50, 800, 'FollowButterfly')
+            .setScale(0.15);
+        followButterfly.play(true);
+
+        this.tweens.chain({
+                tweens: [
+                    {
+                        targets: followButterfly,
+                        x: 940,
+                        y: 575,
+                        duration: 3500
+                    },
+                    {
+                        targets: followButterfly,
+                        y: 600,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'Sine.inOut',
+                        duration: 500,
+                    }
+                ]
+        });
+        //--Interactable River--//
+        this.add.rectangle(400, 700, 800, 80, 0x201010)
+            .setAlpha(0.01)
+            .setInteractive()
+            .on('pointerover', () => {
+                if(Allie.x == 300) {
+                    this.showMessage("Inspect the river?");
+                } else {
+                    this.showMessage("It's the same river as before.");
+                }
+            })
+            .on('pointerout', () => {
+                if(Allie.x == 300) {
+                    this.fadeMessage("Inspect the river?");
+                    this.x1 = 0;
+                } else {
+                    this.fadeMessage("It's the same river as before.");
+                }
+            })
+            .on('pointerdown', () => {
+                if(Allie.x == 300) {
+                    this.cameras.main.fade(5000, 0,0,0);
+                    this.time.delayedCall(5500, () => this.scene.start('riverInspect'));  
+                    return;
+                } else {
+                    this.showMessage("There's that funky smell again...");
+                    this.x1 = 1;
+                    this.tweens.add({
+                        targets: Allie,
+                        y: 750,
+                        x: 300,
+                        scale: 2.5,
+                        duration: 1000,
+                        ease: 'Sine.inOut'
+                    });
+                }
+ 
+            });
+    }
+}
+
+class ParkAfterRod extends AdventureScene {
+    constructor() {
+        super("parkAfterRod", "A Nice Park");
+    }
+
+    preload() {
+        this.load.image('ParkBackground3', 'assets/pixel-art-illustration-park-background-pixelated-park-background-outside-park-background-pixelated-for-the-pixel-art-game-and-icon-for-website-and-game-old-school-retro-vector (1).jpg');
+        this.load.image('BonnieWalkingDown', 'assets/BonnieWalkingDown.gif');
+        this.load.image('AllieWalkingDown', 'assets/AllieWalkingDown.gif');
+        this.load.video('FollowButterfly', 'assets/mariposa-Picsart-BackgroundRemover.mp4');
+    }
+
+    onEnter() {
+        this.add.image(720, 533, "ParkBackground3")
+            .setScale(.92);
+
+        let Allie = this.add.image(400, 820, 'AllieWalkingDown')
+            .setScale(3)
+            .setInteractive()
+            .on('pointerover', () => this.showMessage("That's you, Allie!"))
+            .on('pointerout', () => {
+            if(this.x == 1) {
+                this.fadeMessage("Curious and determined as ever...")
+                this.x = 0;
+            } else {
+                this.fadeMessage("That's you, Allie!");
+            }  
+            })
+            .on('pointerdown', () => {
+                this.showMessage("Curious and determined as ever...");
+                this.x = 1
+                this.tweens.add({
+                    targets: Allie,
+                    scale: 3.35,
+                    yoyo: true,
+                    ease: 'Sine.inOut',
+                    duration: 100
+                });
+            });
+
+        let Bonnie = this.add.image(940, 675, 'BonnieWalkingDown')
+            .setScale(3)
+            .setInteractive()
+            .on('pointerover', () => {
+                if(Allie.x == 840) {
+                this.showMessage("Talk to Bonnie?");
+                } else {
+                    this.showMessage("Who could that be?");
+                }
+            })
+            .on('pointerout', () => {
+                if(Allie.x == 840) {
+                    this.fadeMessage("Talk to Bonnie?");
+                    this.x = 0;
+                } else {
+                    this.fadeMessage("Who could that be?");
+                }  
+            })
+            .on('pointerdown', () => {
+                if(Allie.x == 840) {
+                    this.cameras.main.fade(5000, 0,0,0);
+                    this.time.delayedCall(5500, () => this.scene.start('bonnieDialogue'));
+                } else {
+                    this.showMessage("Let's find out I guess...");
+                    this.x = 1
+                    this.tweens.add({
+                        targets: Allie,
+                        x: 840,
+                        y: 780,
+                        scale: 2.9,
+                        duration: 3000
+                    });
+                }
+            });
+
+        let followButterfly = this.add.video(940, 575, 'FollowButterfly')
+            .setScale(0.15);
+        followButterfly.play(true);
+
+        this.tweens.chain({
+                tweens: [
+                    {
+                        targets: followButterfly,
+                        y: 600,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'Sine.inOut',
+                        duration: 500,
+                    }
+                ]
+        });
+        //--Interactable River--//
+        this.add.rectangle(400, 700, 800, 80, 0x201010)
+            .setAlpha(0.01)
+            .setInteractive()
+            .on('pointerover', () => {
+                if(this.x1 ==1) {
+                    this.showMessage("There's that funky smell again...");
+                } else {
+                    this.showMessage("It's the same river as before.");
+                }
+            })
+            .on('pointerout', () => {
+                if(this.x1 == 1) {
+                    this.fadeMessage("There's that funky smell again...");
+                    this.x1 = 0;
+                } else {
+                    this.fadeMessage("It's the same river as before.");
+                }
+            })
+            .on('pointerdown', () => {
+                    this.showMessage("There's that funky smell again...");
+                    this.x1 = 1;
+                    this.tweens.add({
+                        targets: Allie,
+                        y: 750,
+                        x: 300,
+                        scale: 2.5,
+                        duration: 1000,
+                        ease: 'Sine.inOut'
+                    });
+ 
+            });
+    }
+}
+
+class BonnieDialogue extends AdventureScene {
+    constructor() {
+        super("bonnieDialogue", "A Conversation with Bonnie");
+    }
+
+    preload() {
+        this.load.image('BonnieWalkingDown', 'assets/BonnieWalkingDown.gif');
+        this.load.image('AllieWalkingDown', 'assets/AllieWalkingDown.gif');
+    }
+
+    onEnter() {
+        let Bonnie = this.add.image(1040, 575, 'BonnieWalkingDown')
+            .setScale(10)
+            .setAlpha(.7);
+        let Allie = this.add.image(300, 720, 'AllieWalkingDown')
+            .setScale(10)
+            .setAlpha(.7);
+
+        let bonnieDialogue1 = this.add.text(400, 100, "Allie: Hi what's your name?", { fontSize: '35px Georgia'}).setAlpha(0);
+        let bonnieDialogue2 = this.add.text(400, 200, "Bonnie: My name’s Bonnie! I know about you Allie,\nI can’t imagine how confused you must be.", { fontSize: '35px Georgia'}).setAlpha(0);
+        let bonnieDialogue3 = this.add.text(400, 320, "Allie: Yea...", { fontSize: '35px Georgia'}).setAlpha(0);
+        let bonnieDialogue4 = this.add.text(400, 400, "Bonnie: That's a nice fishing rod you got!", { fontSize: '35px Georgia'}).setAlpha(0);
+        let bonnieDialogue5 = this.add.text(400, 500, "Allie: Oh thanks! You're so nice!", { fontSize: '35px Georgia'}).setAlpha(0);
+        let bonnieDialogue6 = this.add.text(400, 600, "Bonnie: Of course! Litsen, I want to help you! Can I come along?", { fontSize: '35px Georgia'}).setAlpha(0);
+        let bonnieDialogue7 = this.add.text(400, 800, "Let Bonnie Join?", { fontSize: '40px Georgia'}).setColor('#ffffff')
+            .setAlpha(0)
+            .setInteractive({useHandCursor: true})
+            .on('pointerover', () => {
+                bonnieDialogue7.setFill('#3538d3');
+            })
+            .on('pointerout', () => {
+                bonnieDialogue7.setFill('white');
+            })
+            .on('pointerdown', () => {
+                this.cameras.main.fade(1000, 0,0,0);
+                this.time.delayedCall(1000, () => this.scene.start('outro'));
+            })
+        
+        this.tweens.add({
+            targets: [bonnieDialogue1, bonnieDialogue2, bonnieDialogue3, bonnieDialogue4, bonnieDialogue5, bonnieDialogue6],
+            y: 1080,
+            duration: 200000
+        });
+
+        this.tweens.add({
+            targets: [Bonnie, Allie],
+            scale: 14,
+            duration: 200000
+        });
+
+        if (this.hasItem('fishingRod') == true) {
+            this.tweens.chain({ 
+                tweens: [
+                    {
+                        targets: bonnieDialogue1,
+                        alpha: 1,
+                        duration: 2000,
+                        delay: 1000
+                    },
+                    {
+                        targets: bonnieDialogue2,
+                        alpha: 1,
+                        duration: 2000  
+                    },
+                    {
+                        targets: bonnieDialogue3,
+                        alpha: 1,
+                        duration: 2000
+                    },
+                    {
+                        targets: bonnieDialogue4,
+                        alpha: 1,
+                        duration: 2000
+                    },
+                    {
+                        targets: bonnieDialogue5,
+                        alpha: 1,
+                        duration: 2000
+                    },
+                    {
+                        targets: bonnieDialogue6,
+                        alpha: 1,
+                        duration: 2000
+                    }, 
+                    {
+                        targets: bonnieDialogue7,
+                        alpha: 1,
+                        duration: 2000
+                    }
+                ]            
+            });
+
+        } else {
+            this.tweens.chain({ 
+                tweens: [
+                    {
+                        targets: bonnieDialogue1,
+                        alpha: 1,
+                        duration: 2000,
+                        delay: 1000
+                    },
+                    {
+                        targets: bonnieDialogue2,
+                        alpha: 1,
+                        duration: 2000  
+                    },
+                    {
+                        targets: bonnieDialogue3,
+                        alpha: 1,
+                        duration: 2000
+                    },
+                    {
+                        targets: bonnieDialogue6,
+                        alpha: 1,
+                        duration: 2000
+                    }, 
+                    {
+                        targets: bonnieDialogue7,
+                        alpha: 1,
+                        duration: 2000
+                    }
+                ]            
+            });
+        }
+    }
+}
+
+class RiverInspect extends AdventureScene {
+    constructor() {
+        super("riverInspect", "A Smelly River");
+    }
+    
+    preload() {
+        this.load.image('RiverBackground', 'assets/pixel-art-illustration-park-background-pixelated-park-background-outside-park-background-pixelated-for-the-pixel-art-game-and-icon-for-website-and-game-old-school-retro-vector (1).jpg');  
+        this.load.image('AllieWalkingDown', 'assets/AllieWalkingDown.gif');
+        this.load.image('FishingRod', 'assets/a-retro-styled-pixel-art-illustration-of-a-fishing-rod-free-png.png');
+    }
+    
+    onEnter() {
+        this.add.image(1490, 540, 'RiverBackground').setScale(1.9);
+
+        let fishingRod = this.add.image(400, 980, 'FishingRod')
+            .setScale(0.15)
+            .setAngle(20)
+            .setInteractive()
+            .on('pointerover', () => this.showMessage("You found a weak fishing rod! (+1 Dmg, Can be used to fish [click item to aquire]"))
+            .on('pointerout', () => this.fadeMessage("You found a weak fishing rod! (+1 Dmg, Can be used to fish [click item to aquire]"))
+            .on('pointerdown', () => {
+                this.showMessage("Item aquired: Fishing Rod!");
+                this.gainItem('fishingRod');
+                this.tweens.add({
+                   targets: fishingRod,
+                   y: `-=${2 * this.s}`,
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                    onComplete: () => fishingRod.destroy()
+                });
+                this.time.delayedCall(3000, () => this.cameras.main.fade(2000, 0,0,0));
+                this.time.delayedCall(3000, () => this.scene.start('parkAfterRod'));
+            });
+
+        this.tweens.add({
+            targets: fishingRod,
+            scale: .16,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.inOut',
+            duration: 500
+        });
+        let Allie = this.add.image(900, 1240, 'AllieWalkingDown').setScale(15);
+    }
 }
 
 class Intro extends Phaser.Scene {
@@ -545,12 +1008,12 @@ class Outro extends Phaser.Scene {
         super('outro');
     }
     create() {
-        this.add.text(50, 50, "That's all!").setFontSize(50);
+        this.sound.stopAll();
+        this.add.text(50, 50, "Thats if for now...").setFontSize(50);
         this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
         this.input.on('pointerdown', () => this.scene.start('intro'));
     }
 }
-
 
 const game = new Phaser.Game({
     scale: {
@@ -562,7 +1025,6 @@ const game = new Phaser.Game({
     render: {
         pixelArt: true
     },
-    scene: [Intro, Monologue, Park1, Park2, Outro],
+    scene: [Intro, Monologue, Park1, Park2, Park3, RiverInspect, ParkAfterRod, BonnieDialogue, Outro],
     title: "Adventure Game",
 });
-

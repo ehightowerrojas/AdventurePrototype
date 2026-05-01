@@ -53,10 +53,10 @@ class AdventureScene extends Phaser.Scene {
         /** @type {number} UI spacing unit in scaled pixels (1% of width). Use multiples of `this.s` for text sizes, margins, etc. */
         this.s = this.game.config.width * 0.01;
 
-        this.cameras.main.setBackgroundColor('#000000');
+        this.cameras.main.setBackgroundColor('#000000d2');
         this.cameras.main.fadeIn(this.transitionDuration, 0, 0, 0);
 
-        this.add.rectangle(this.w * .75, 0, this.w * 0.25, this.h).setOrigin(0, 0).setFillStyle(0x202168, 1).setDepth(10);
+        this.add.rectangle(this.w * .75, 0, this.w * 0.25, this.h).setOrigin(0, 0).setFillStyle(0x000000, 1).setDepth(10);
         this.add.text(this.w * 0.75 + this.s, this.s)
             .setDepth(12)
             .setText(this.name)
@@ -263,4 +263,5 @@ class AdventureScene extends Phaser.Scene {
     onEnter() {
         console.warn('This AdventureScene did not implement onEnter():', this.constructor.name);
     }
+
 }
