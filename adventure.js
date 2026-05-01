@@ -70,7 +70,7 @@ class AdventureScene extends Phaser.Scene {
 
         this.inventoryBanner = this.add.text(this.w * 0.75 + this.s, this.h * 0.66)
             .setDepth(12)
-            .setStyle({ fontSize: `${2 * this.s}px Georgia` })
+            .setStyle({ fontSize: `${2 * this.s}px Georgia`, color: '#ff7c7c' })
             .setText("Inventory")
             .setAlpha(0);
 
@@ -163,7 +163,8 @@ class AdventureScene extends Phaser.Scene {
         let h = this.h * 0.66 + 3 * this.s;
         this.inventory.forEach((e, i) => {
             let text = this.add.text(this.w * 0.75 + 2 * this.s, h, e)
-                .setStyle({ fontSize: `${1.5 * this.s}px Georgia` })
+                .setDepth(12)
+                .setStyle({ fontSize: `${1.5 * this.s}px Georgia`, color: '#f3f3f3'})
                 .setWordWrapWidth(this.w * 0.75 + 4 * this.s);
             h += text.height + this.s;
             this.inventoryTexts.push(text);

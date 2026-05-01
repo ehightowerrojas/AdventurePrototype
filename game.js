@@ -904,7 +904,7 @@ class RiverInspect extends AdventureScene {
             .on('pointerdown', () => {
                 this.registry.set('score', 1); 
                 this.showMessage("Item aquired: Fishing Rod!");
-                this.gainItem('fishingRod');
+                this.gainItem('Weak Fishing Rod');
                 this.tweens.add({
                    targets: fishingRod,
                    y: `-=${2 * this.s}`,
@@ -1010,7 +1010,7 @@ class Outro extends Phaser.Scene {
     }
     create() {
         this.sound.stopAll();
-        this.add.text(50, 50, "Thats if for now...").setFontSize(50);
+        this.add.text(50, 50, "Thats if for now..." ).setFontSize(50);
         this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
         this.input.on('pointerdown', () => this.scene.start('intro'));
     }
@@ -1026,6 +1026,6 @@ const game = new Phaser.Game({
     render: {
         pixelArt: true
     },
-    scene: [RiverInspect, Intro, Monologue, Park1, Park2, Park3, ParkAfterRod, BonnieDialogue, Outro],
+    scene: [Intro, Monologue, Park1, Park2, Park3, RiverInspect, ParkAfterRod, BonnieDialogue, Outro],
     title: "Adventure Game",
 });
